@@ -184,8 +184,6 @@ type Repository struct {
 	ExternalTrackerStyle  string
 	ExternalMetas         map[string]string `xorm:"-"`
 	EnablePulls           bool              `xorm:"NOT NULL DEFAULT true"`
-	PullsIgnoreWhitespace bool              `xorm:"NOT NULL DEFAULT false"`
-	PullsAllowRebase      bool              `xorm:"NOT NULL DEFAULT false"`
 
 	IsFork   bool `xorm:"NOT NULL DEFAULT false"`
 	ForkID   int64
@@ -874,16 +872,19 @@ func prepareRepoCommit(repo *Repository, tmpDir, repoPath string, opts CreateRep
 		return fmt.Errorf("getRepoInitFile[%s]: %v", opts.Readme, err)
 	}
 
-	cloneLink := repo.CloneLink()
-	match := map[string]string{
-		"Name":           repo.Name,
-		"Description":    repo.Description,
-		"CloneURL.SSH":   cloneLink.SSH,
-		"CloneURL.HTTPS": cloneLink.HTTPS,
-	}
-	if err = ioutil.WriteFile(filepath.Join(tmpDir, "README.md"),
-		[]byte(com.Expand(string(data), match)), 0644); err != nil {
-		return fmt.Errorf("write README.md: %v", err)
+	//cloneLink := repo.CloneLink()
+	// match := map[string]string{
+	// 	"Name":           repo.Name,
+	// 	"Description":    repo.Description,
+	// 	"CloneURL.SSH":   cloneLink.SSH,
+	// 	"CloneURL.HTTPS": cloneLink.HTTPS,
+	// }
+	//替换package.mo模板为项目名称
+	pkgContent := string(data)
+	newpkgContent := strings.Replace(pkgContent, "syslinkPkg", repo.Name, -1)
+	if err = ioutil.WriteFile(filepath.Join(tmpDir, "package.mo"),
+		[]byte(newpkgContent), 0644); err != nil {
+		return fmt.Errorf("write package.mo: %v", err)
 	}
 
 	// .gitignore

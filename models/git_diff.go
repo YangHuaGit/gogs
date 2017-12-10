@@ -17,9 +17,9 @@ import (
 
 	"github.com/gogits/git-module"
 
-	"github.com/gogits/gogs/pkg/tool"
 	"github.com/gogits/gogs/pkg/setting"
 	"github.com/gogits/gogs/pkg/template/highlight"
+	"github.com/gogits/gogs/pkg/tool"
 )
 
 type DiffSection struct {

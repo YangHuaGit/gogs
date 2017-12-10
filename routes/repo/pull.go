@@ -275,7 +275,7 @@ func ViewPullCommits(c *context.Context) {
 		if c.Written() {
 			return
 		} else if prInfo == nil {
-			c.NotFound()
+			c.Handle(404, "ViewPullCommits", nil)
 			return
 		}
 		commits = prInfo.Commits
@@ -389,7 +389,7 @@ func MergePullRequest(c *context.Context) {
 		return
 	}
 	if issue.IsClosed {
-		c.NotFound()
+		c.Handle(404, "MergePullRequest", nil)
 		return
 	}
 
@@ -400,13 +400,13 @@ func MergePullRequest(c *context.Context) {
 	}
 
 	if !pr.CanAutoMerge() || pr.HasMerged {
-		c.NotFound()
+		c.Handle(404, "MergePullRequest", nil)
 		return
 	}
 
 	pr.Issue = issue
 	pr.Issue.Repo = c.Repo.Repository
-	if err = pr.Merge(c.User, c.Repo.GitRepo, models.MergeStyle(c.Query("merge_style"))); err != nil {
+	if err = pr.Merge(c.User, c.Repo.GitRepo); err != nil {
 		c.ServerError("Merge", err)
 		return
 	}

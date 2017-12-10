@@ -208,10 +208,9 @@ func Config(c *context.Context) {
 	c.Data["RepoRootPath"] = setting.RepoRootPath
 	c.Data["ScriptType"] = setting.ScriptType
 	c.Data["Repository"] = setting.Repository
-	c.Data["HTTP"] = setting.HTTP
 
-	c.Data["DbCfg"] = models.DbCfg
 	c.Data["Service"] = setting.Service
+	c.Data["DbCfg"] = models.DbCfg
 	c.Data["Webhook"] = setting.Webhook
 
 	c.Data["MailerEnabled"] = false

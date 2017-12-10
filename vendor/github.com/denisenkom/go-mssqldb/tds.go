@@ -6,6 +6,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
+	"golang.org/x/net/context" // use the "x/net/context" for backwards compatibility.
 	"io"
 	"io/ioutil"
 	"net"
@@ -18,7 +19,6 @@ import (
 	"unicode"
 	"unicode/utf16"
 	"unicode/utf8"
-	"golang.org/x/net/context" // use the "x/net/context" for backwards compatibility.
 )
 
 func parseInstances(msg []byte) map[string]map[string]string {

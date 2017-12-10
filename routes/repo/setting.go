@@ -147,8 +147,6 @@ func SettingsPost(c *context.Context, f form.RepoSetting) {
 		repo.ExternalTrackerFormat = f.TrackerURLFormat
 		repo.ExternalTrackerStyle = f.TrackerIssueStyle
 		repo.EnablePulls = f.EnablePulls
-		repo.PullsIgnoreWhitespace = f.PullsIgnoreWhitespace
-		repo.PullsAllowRebase = f.PullsAllowRebase
 
 		if err := models.UpdateRepository(repo, false); err != nil {
 			c.ServerError("UpdateRepository", err)

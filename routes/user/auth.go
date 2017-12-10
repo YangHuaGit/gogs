@@ -31,11 +31,16 @@ const (
 
 // AutoLogin reads cookie and try to auto-login.
 func AutoLogin(c *context.Context) (bool, error) {
-	if !models.HasEngine {
-		return false, nil
-	}
-
+	//if !models.HasEngine {
+	//	return false, nil
+	//}
+	// c.Session.Delete("uid")
+	// c.Session.Delete("uname")
+    fmt.Print("1111111"+setting.CookieUserName+"1111111")
 	uname := c.GetCookie(setting.CookieUserName)
+	fmt.Print("1111111"+uname+"1111111")
+
+	//	uname := c.GetCookie("gogs_awesome")
 	if len(uname) == 0 {
 		return false, nil
 	}
@@ -43,6 +48,7 @@ func AutoLogin(c *context.Context) (bool, error) {
 	isSucceed := false
 	defer func() {
 		if !isSucceed {
+			fmt.Print("2222222"+uname+"222222")
 			log.Trace("auto-login cookie cleared: %s", uname)
 			c.SetCookie(setting.CookieUserName, "", -1, setting.AppSubURL)
 			c.SetCookie(setting.CookieRememberName, "", -1, setting.AppSubURL)
@@ -51,6 +57,7 @@ func AutoLogin(c *context.Context) (bool, error) {
 	}()
 
 	u, err := models.GetUserByName(uname)
+	fmt.Print("333333"+u.Rands+u.Passwd+"3333")
 	if err != nil {
 		if !errors.IsUserNotExist(err) {
 			return false, fmt.Errorf("GetUserByName: %v", err)
@@ -58,13 +65,18 @@ func AutoLogin(c *context.Context) (bool, error) {
 		return false, nil
 	}
 
-	if val, ok := c.GetSuperSecureCookie(u.Rands+u.Passwd, setting.CookieRememberName); !ok || val != u.Name {
-		return false, nil
-	}
+	//if val, ok := c.GetSuperSecureCookie(u.Rands+u.Passwd, setting.CookieRememberName); !ok || val != u.Name {
+	//	fmt.Print("333333"+u.Rands+u.Passwd+"3333")
+	//	return false, nil
+	//}
 
 	isSucceed = true
+
+
 	c.Session.Set("uid", u.ID)
 	c.Session.Set("uname", u.Name)
+	fmt.Print(c.Session.Get("uname"))
+	fmt.Print(c.Session.Get("uid"))
 	c.SetCookie(setting.CSRFCookieName, "", -1, setting.AppSubURL)
 	if setting.EnableLoginStatusCookie {
 		c.SetCookie(setting.LoginStatusCookieName, "true", 0, setting.AppSubURL)
@@ -95,6 +107,7 @@ func Login(c *context.Context) {
 	} else {
 		redirectTo, _ = url.QueryUnescape(c.GetCookie("redirect_to"))
 	}
+	c.SetCookie("redirect_to", "", -1, setting.AppSubURL)
 
 	if isSucceed {
 		if isValidRedirect(redirectTo) {
@@ -102,7 +115,6 @@ func Login(c *context.Context) {
 		} else {
 			c.Redirect(setting.AppSubURL + "/")
 		}
-		c.SetCookie("redirect_to", "", -1, setting.AppSubURL)
 		return
 	}
 
@@ -243,11 +255,38 @@ func LoginTwoFactorRecoveryCodePost(c *context.Context) {
 func SignOut(c *context.Context) {
 	c.Session.Delete("uid")
 	c.Session.Delete("uname")
-	c.SetCookie(setting.CookieUserName, "", -1, setting.AppSubURL)
+	// c.SetCookie(setting.CookieUserName, "", -1, setting.AppSubURL)
 	c.SetCookie(setting.CookieRememberName, "", -1, setting.AppSubURL)
 	c.SetCookie(setting.CSRFCookieName, "", -1, setting.AppSubURL)
+	// c.Redirect(setting.AppSubURL + "/")
+	// c.SetCookie("JSESSIONID", "", -1, "gogs.modelica-china.com")
+	// c.Redirect("http://gogs.modelica-china.com:8080/login.html#/logout")
+	c.Redirect("http://syslink.com/#/logout")
+}
+
+func SignOut1(c *context.Context) {
+	c.Session.Delete("uid")
+	c.Session.Delete("uname")
+	// c.SetCookie(setting.CookieUserName, "", -1, setting.AppSubURL)
+	// c.SetCookie(setting.CookieRememberName, "", -1, setting.AppSubURL)
+	// c.SetCookie(setting.CSRFCookieName, "", -1, setting.AppSubURL)
 	c.Redirect(setting.AppSubURL + "/")
 }
+
+func ToWorkbench(c *context.Context) {
+	//  c.Session.Delete("uid")
+	//  c.Session.Delete("uname")
+	// c.Redirect("http://gogs.modelica-china.com/#/Myspace")
+	fmt.Print(setting.AppURL)
+	c.Redirect(setting.WorkBenchURL)
+}
+
+func ToModel(c *context.Context) {
+	 c.Session.Delete("uid")
+	 c.Session.Delete("uname")
+	c.Redirect(setting.ModelURL)
+}
+
 
 func SignUp(c *context.Context) {
 	c.Data["Title"] = c.Tr("sign_up")

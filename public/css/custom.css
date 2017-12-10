@@ -1,0 +1,134 @@
+.ui.container:not(.fluid) {
+    width: 1180px !important;
+}
+.syslink-logo {
+    vertical-align: middle;
+    line-height: 60px;
+    width: 320px;
+    color: white;
+
+    height: 50px;
+    font-size: 22px;
+    padding-left: 0px;
+    padding-right: 0px;
+    border-color: rgba(238, 241, 146, 0.3);
+    border-right-width: 1px;
+    border-right-style: solid;
+
+    font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif;
+}
+.following.bar.light {
+    background-color: #222;
+    border-bottom: 1px solid #DDDDDD;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.04);
+}
+.ui.menu .item1 {
+    position: relative;
+    vertical-align: middle;
+    line-height: 1;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 auto;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background: 0 0;
+    padding: .92857143em 1.14285714em;
+    text-transform: none;
+    font-weight: 400;
+    -webkit-transition: background .1s ease,box-shadow .1s ease,color .1s ease;
+    transition: background .1s ease,box-shadow .1s ease,color .1s ease;
+    color: #9d9d9d;
+
+    font-size: 18px;
+    position: relative;
+    display: inline-block;
+    margin-right: 16px;
+    text-decoration: none;
+}
+.ui.menu .item1:hover{
+    color: #fff;
+}
+.ui.secondary.menu .active.item1 {
+    box-shadow: none;
+    background: #222;
+    /* color: rgba(0,0,0,.95); */
+    border-radius: .28571429rem;
+    color: white;
+
+    font-size: 18px;
+    position: relative;
+    display: inline-block;
+    margin-right: 16px;
+    text-decoration: none;
+}
+.ui.menu .active.item1 {
+    background: #222;
+    /* color: rgba(0,0,0,.95); */
+    font-weight: 400;
+    box-shadow: none;
+    color: white;
+
+    font-size: 18px;
+    position: relative;
+    display: inline-block;
+    margin-right: 16px;
+    text-decoration: none;
+}
+/*.ui.menu {*/
+    /*display: -webkit-box;*/
+    /*display: -webkit-flex;*/
+    /*display: -ms-flexbox;*/
+    /*display: flex;*/
+    /*margin: 1rem 0;*/
+    /*font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;*/
+    /*background: #FFF;*/
+    /*font-weight: 400;*/
+    /*border: 1px solid rgba(34,36,38,.15);*/
+    /*box-shadow: 0 1px 2px 0 rgba(34,36,38,.15);*/
+    /*border-radius: .28571429rem;*/
+    /*min-height: 2.85714286em;*/
+    /*height: 50px;*/
+/*}*/
+.ui.menu .item {
+    position: relative;
+    vertical-align: middle;
+    line-height: 1;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 auto;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background: 0 0;
+    padding: .92857143em 1.14285714em;
+    text-transform: none;
+    /*color: white;*/
+    color:black;
+    font-weight: 400;
+    -webkit-transition: background .1s ease,box-shadow .1s ease,color .1s ease;
+    transition: background .1s ease,box-shadow .1s ease,color .1s ease;
+}
+#syslink-dropdown:hover {
+    color:white;
+}
+#syslink-dropdown {
+    color:white;
+}
+
+.ui.secondary.pointing.menu1
+{
+    margin-left: 0;
+    margin-right: 0;
+}
+
+
+

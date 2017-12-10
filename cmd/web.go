@@ -37,7 +37,7 @@ import (
 	"github.com/gogits/gogs/pkg/setting"
 	"github.com/gogits/gogs/pkg/template"
 	"github.com/gogits/gogs/routes"
-	"github.com/gogits/gogs/routes/admin"
+	// "github.com/gogits/gogs/routes/admin"
 	apiv1 "github.com/gogits/gogs/routes/api/v1"
 	"github.com/gogits/gogs/routes/dev"
 	"github.com/gogits/gogs/routes/org"
@@ -137,6 +137,15 @@ func newMacaron() *macaron.Macaron {
 		SubURL: setting.AppSubURL,
 	}))
 	m.Use(session.Sessioner(setting.SessionConfig))
+// 	m.Use(session.Sessioner(session.Options{
+//     Provider:       "redis",
+//     // e.g.: network=tcp,addr=127.0.0.1:6379,password=macaron,db=0,pool_size=100,idle_timeout=180,prefix=session:
+//     ProviderConfig: "addr=127.0.0.1:6379,prefix=spring:session:sessions:aaa:,password=macaron",
+//     CookieName: "SESSION1",
+//     IDLength: 32,
+
+// }))
+
 	m.Use(csrf.Csrfer(csrf.Options{
 		Secret:     setting.SecretKey,
 		Cookie:     setting.CSRFCookieName,
@@ -203,43 +212,43 @@ func runWeb(c *cli.Context) error {
 		m.Post("/reset_password", user.ResetPasswdPost)
 	}, reqSignOut)
 
-	m.Group("/user/settings", func() {
-		m.Get("", user.Settings)
-		m.Post("", bindIgnErr(form.UpdateProfile{}), user.SettingsPost)
-		m.Combo("/avatar").Get(user.SettingsAvatar).
-			Post(binding.MultipartForm(form.Avatar{}), user.SettingsAvatarPost)
-		m.Post("/avatar/delete", user.SettingsDeleteAvatar)
-		m.Combo("/email").Get(user.SettingsEmails).
-			Post(bindIgnErr(form.AddEmail{}), user.SettingsEmailPost)
-		m.Post("/email/delete", user.DeleteEmail)
-		m.Get("/password", user.SettingsPassword)
-		m.Post("/password", bindIgnErr(form.ChangePassword{}), user.SettingsPasswordPost)
-		m.Combo("/ssh").Get(user.SettingsSSHKeys).
-			Post(bindIgnErr(form.AddSSHKey{}), user.SettingsSSHKeysPost)
-		m.Post("/ssh/delete", user.DeleteSSHKey)
-		m.Group("/security", func() {
-			m.Get("", user.SettingsSecurity)
-			m.Combo("/two_factor_enable").Get(user.SettingsTwoFactorEnable).
-				Post(user.SettingsTwoFactorEnablePost)
-			m.Combo("/two_factor_recovery_codes").Get(user.SettingsTwoFactorRecoveryCodes).
-				Post(user.SettingsTwoFactorRecoveryCodesPost)
-			m.Post("/two_factor_disable", user.SettingsTwoFactorDisable)
-		})
-		m.Group("/repositories", func() {
-			m.Get("", user.SettingsRepos)
-			m.Post("/leave", user.SettingsLeaveRepo)
-		})
-		m.Group("/organizations", func() {
-			m.Get("", user.SettingsOrganizations)
-			m.Post("/leave", user.SettingsLeaveOrganization)
-		})
-		m.Combo("/applications").Get(user.SettingsApplications).
-			Post(bindIgnErr(form.NewAccessToken{}), user.SettingsApplicationsPost)
-		m.Post("/applications/delete", user.SettingsDeleteApplication)
-		m.Route("/delete", "GET,POST", user.SettingsDelete)
-	}, reqSignIn, func(c *context.Context) {
-		c.Data["PageIsUserSettings"] = true
-	})
+	// m.Group("/user/settings", func() {
+	// 	m.Get("", user.Settings)
+	// 	m.Post("", bindIgnErr(form.UpdateProfile{}), user.SettingsPost)
+	// 	m.Combo("/avatar").Get(user.SettingsAvatar).
+	// 		Post(binding.MultipartForm(form.Avatar{}), user.SettingsAvatarPost)
+	// 	m.Post("/avatar/delete", user.SettingsDeleteAvatar)
+	// 	m.Combo("/email").Get(user.SettingsEmails).
+	// 		Post(bindIgnErr(form.AddEmail{}), user.SettingsEmailPost)
+	// 	m.Post("/email/delete", user.DeleteEmail)
+	// 	m.Get("/password", user.SettingsPassword)
+	// 	m.Post("/password", bindIgnErr(form.ChangePassword{}), user.SettingsPasswordPost)
+	// 	m.Combo("/ssh").Get(user.SettingsSSHKeys).
+	// 		Post(bindIgnErr(form.AddSSHKey{}), user.SettingsSSHKeysPost)
+	// 	m.Post("/ssh/delete", user.DeleteSSHKey)
+	// 	m.Group("/security", func() {
+	// 		m.Get("", user.SettingsSecurity)
+	// 		m.Combo("/two_factor_enable").Get(user.SettingsTwoFactorEnable).
+	// 			Post(user.SettingsTwoFactorEnablePost)
+	// 		m.Combo("/two_factor_recovery_codes").Get(user.SettingsTwoFactorRecoveryCodes).
+	// 			Post(user.SettingsTwoFactorRecoveryCodesPost)
+	// 		m.Post("/two_factor_disable", user.SettingsTwoFactorDisable)
+	// 	})
+	// 	m.Group("/repositories", func() {
+	// 		m.Get("", user.SettingsRepos)
+	// 		m.Post("/leave", user.SettingsLeaveRepo)
+	// 	})
+	// 	m.Group("/organizations", func() {
+	// 		m.Get("", user.SettingsOrganizations)
+	// 		m.Post("/leave", user.SettingsLeaveOrganization)
+	// 	})
+	// 	m.Combo("/applications").Get(user.SettingsApplications).
+	// 		Post(bindIgnErr(form.NewAccessToken{}), user.SettingsApplicationsPost)
+	// 	m.Post("/applications/delete", user.SettingsDeleteApplication)
+	// 	m.Route("/delete", "GET,POST", user.SettingsDelete)
+	// }, reqSignIn, func(c *context.Context) {
+	// 	c.Data["PageIsUserSettings"] = true
+	// })
 
 	m.Group("/user", func() {
 		m.Any("/activate", user.Activate)
@@ -248,48 +257,51 @@ func runWeb(c *cli.Context) error {
 		m.Get("/forget_password", user.ForgotPasswd)
 		m.Post("/forget_password", user.ForgotPasswdPost)
 		m.Get("/logout", user.SignOut)
+		m.Get("/111", user.SignOut1)
+		m.Get("/toWorkbench",user.ToWorkbench)
+		m.Get("/toModel",user.ToModel)
 	})
 	// ***** END: User *****
 
 	adminReq := context.Toggle(&context.ToggleOptions{SignInRequired: true, AdminRequired: true})
 
 	// ***** START: Admin *****
-	m.Group("/admin", func() {
-		m.Get("", adminReq, admin.Dashboard)
-		m.Get("/config", admin.Config)
-		m.Post("/config/test_mail", admin.SendTestMail)
-		m.Get("/monitor", admin.Monitor)
+// m.Group("/admin", func() {
+// 		m.Get("", adminReq, admin.Dashboard)
+// 		m.Get("/config", admin.Config)
+// 		m.Post("/config/test_mail", admin.SendTestMail)
+// 		m.Get("/monitor", admin.Monitor)
 
-		m.Group("/users", func() {
-			m.Get("", admin.Users)
-			m.Combo("/new").Get(admin.NewUser).Post(bindIgnErr(form.AdminCrateUser{}), admin.NewUserPost)
-			m.Combo("/:userid").Get(admin.EditUser).Post(bindIgnErr(form.AdminEditUser{}), admin.EditUserPost)
-			m.Post("/:userid/delete", admin.DeleteUser)
-		})
+// 		m.Group("/users", func() {
+// 			m.Get("", admin.Users)
+// 			m.Combo("/new").Get(admin.NewUser).Post(bindIgnErr(form.AdminCrateUser{}), admin.NewUserPost)
+// 			m.Combo("/:userid").Get(admin.EditUser).Post(bindIgnErr(form.AdminEditUser{}), admin.EditUserPost)
+// 			m.Post("/:userid/delete", admin.DeleteUser)
+// 		})
 
-		m.Group("/orgs", func() {
-			m.Get("", admin.Organizations)
-		})
+// 		m.Group("/orgs", func() {
+// 			m.Get("", admin.Organizations)
+// 		})
 
-		m.Group("/repos", func() {
-			m.Get("", admin.Repos)
-			m.Post("/delete", admin.DeleteRepo)
-		})
+// 		m.Group("/repos", func() {
+// 			m.Get("", admin.Repos)
+// 			m.Post("/delete", admin.DeleteRepo)
+// 		})
 
-		m.Group("/auths", func() {
-			m.Get("", admin.Authentications)
-			m.Combo("/new").Get(admin.NewAuthSource).Post(bindIgnErr(form.Authentication{}), admin.NewAuthSourcePost)
-			m.Combo("/:authid").Get(admin.EditAuthSource).
-				Post(bindIgnErr(form.Authentication{}), admin.EditAuthSourcePost)
-			m.Post("/:authid/delete", admin.DeleteAuthSource)
-		})
+// 		m.Group("/auths", func() {
+// 			m.Get("", admin.Authentications)
+// 			m.Combo("/new").Get(admin.NewAuthSource).Post(bindIgnErr(form.Authentication{}), admin.NewAuthSourcePost)
+// 			m.Combo("/:authid").Get(admin.EditAuthSource).
+// 				Post(bindIgnErr(form.Authentication{}), admin.EditAuthSourcePost)
+// 			m.Post("/:authid/delete", admin.DeleteAuthSource)
+// 		})
 
-		m.Group("/notices", func() {
-			m.Get("", admin.Notices)
-			m.Post("/delete", admin.DeleteNotices)
-			m.Get("/empty", admin.EmptyNotices)
-		})
-	}, adminReq)
+// 		m.Group("/notices", func() {
+// 			m.Get("", admin.Notices)
+// 			m.Post("/delete", admin.DeleteNotices)
+// 			m.Get("/empty", admin.EmptyNotices)
+// 		})
+// 	}, adminReq)
 	// ***** END: Admin *****
 
 	m.Group("", func() {
@@ -387,12 +399,10 @@ func runWeb(c *cli.Context) error {
 					m.Post("/gogs/new", bindIgnErr(form.NewWebhook{}), repo.WebHooksNewPost)
 					m.Post("/slack/new", bindIgnErr(form.NewSlackHook{}), repo.SlackHooksNewPost)
 					m.Post("/discord/new", bindIgnErr(form.NewDiscordHook{}), repo.DiscordHooksNewPost)
-					m.Post("/dingtalk/new", bindIgnErr(form.NewDingtalkHook{}), repo.DingtalkHooksNewPost)
 					m.Get("/:id", repo.WebHooksEdit)
 					m.Post("/gogs/:id", bindIgnErr(form.NewWebhook{}), repo.WebHooksEditPost)
 					m.Post("/slack/:id", bindIgnErr(form.NewSlackHook{}), repo.SlackHooksEditPost)
 					m.Post("/discord/:id", bindIgnErr(form.NewDiscordHook{}), repo.DiscordHooksEditPost)
-					m.Post("/dingtalk/:id", bindIgnErr(form.NewDingtalkHook{}), repo.DingtalkHooksEditPost)
 				})
 
 				m.Route("/delete", "GET,POST", org.SettingsDelete)
@@ -405,13 +415,13 @@ func runWeb(c *cli.Context) error {
 
 	// ***** START: Repository *****
 	m.Group("/repo", func() {
-		m.Get("/create", repo.Create)
+		m.Get("/create", adminReq,repo.Create)
 		m.Post("/create", bindIgnErr(form.CreateRepo{}), repo.CreatePost)
 		m.Get("/migrate", repo.Migrate)
 		m.Post("/migrate", bindIgnErr(form.MigrateRepo{}), repo.MigratePost)
 		m.Combo("/fork/:repoid").Get(repo.Fork).
 			Post(bindIgnErr(form.CreateRepo{}), repo.ForkPost)
-	}, reqSignIn)
+	},reqSignIn)
 
 	m.Group("/:username/:reponame", func() {
 		m.Group("/settings", func() {
@@ -441,11 +451,9 @@ func runWeb(c *cli.Context) error {
 				m.Post("/gogs/new", bindIgnErr(form.NewWebhook{}), repo.WebHooksNewPost)
 				m.Post("/slack/new", bindIgnErr(form.NewSlackHook{}), repo.SlackHooksNewPost)
 				m.Post("/discord/new", bindIgnErr(form.NewDiscordHook{}), repo.DiscordHooksNewPost)
-				m.Post("/dingtalk/new", bindIgnErr(form.NewDingtalkHook{}), repo.DingtalkHooksNewPost)
 				m.Post("/gogs/:id", bindIgnErr(form.NewWebhook{}), repo.WebHooksEditPost)
 				m.Post("/slack/:id", bindIgnErr(form.NewSlackHook{}), repo.SlackHooksEditPost)
 				m.Post("/discord/:id", bindIgnErr(form.NewDiscordHook{}), repo.DiscordHooksEditPost)
-				m.Post("/dingtalk/:id", bindIgnErr(form.NewDingtalkHook{}), repo.DingtalkHooksEditPost)
 
 				m.Group("/:id", func() {
 					m.Get("", repo.WebHooksEdit)

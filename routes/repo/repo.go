@@ -62,10 +62,13 @@ func checkContextUser(c *context.Context, uid int64) *models.User {
 		c.Error(403)
 		return nil
 	}
+
 	return org
 }
 
 func Create(c *context.Context) {
+
+
 	c.Data["Title"] = c.Tr("new_repo")
 
 	// Give default value for template to render.
@@ -77,6 +80,8 @@ func Create(c *context.Context) {
 	c.Data["IsForcedPrivate"] = setting.Repository.ForcePrivate
 
 	ctxUser := checkContextUser(c, c.QueryInt64("org"))
+
+
 	if c.Written() {
 		return
 	}
@@ -146,6 +151,8 @@ func CreatePost(c *context.Context, f form.CreateRepo) {
 }
 
 func Migrate(c *context.Context) {
+    
+    
 	c.Data["Title"] = c.Tr("new_migrate")
 	c.Data["private"] = c.User.LastRepoVisibility
 	c.Data["IsForcedPrivate"] = setting.Repository.ForcePrivate

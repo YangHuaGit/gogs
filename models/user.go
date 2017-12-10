@@ -76,6 +76,7 @@ type User struct {
 	// Permissions
 	IsActive         bool // Activate primary email
 	IsAdmin          bool
+	CreateRepo       bool 
 	AllowGitHook     bool
 	AllowImportLocal bool // Allow migrate repository by local path
 	ProhibitLogin    bool
@@ -160,6 +161,10 @@ func (u *User) CanCreateRepo() bool {
 
 func (u *User) CanCreateOrganization() bool {
 	return !setting.Admin.DisableRegularOrgCreation || u.IsAdmin
+}
+
+func (u *User) SyslinkCreateRepo() bool {
+	return u.IsAdmin
 }
 
 // CanEditGitHook returns true if user can edit Git hooks.

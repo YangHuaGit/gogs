@@ -11,6 +11,7 @@ import (
 	"github.com/gogits/gogs/pkg/context"
 	"github.com/gogits/gogs/pkg/setting"
 	"github.com/gogits/gogs/routes/user"
+	"fmt"
 )
 
 const (
@@ -30,10 +31,13 @@ func Home(c *context.Context) {
 		}
 		return
 	}
-
+    
+ //    c.Session.Set("uid", 1)
+	// c.Session.Set("uname", "yh")
 	// Check auto-login.
 	uname := c.GetCookie(setting.CookieUserName)
 	if len(uname) != 0 {
+		fmt.Print("555555"+setting.CookieUserName+"55555")
 		c.Redirect(setting.AppSubURL + "/user/login")
 		return
 	}

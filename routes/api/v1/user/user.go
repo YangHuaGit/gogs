@@ -12,7 +12,6 @@ import (
 	"github.com/gogits/gogs/models"
 	"github.com/gogits/gogs/models/errors"
 	"github.com/gogits/gogs/pkg/context"
-	"github.com/gogits/gogs/pkg/markup"
 )
 
 func Search(c *context.APIContext) {
@@ -40,7 +39,7 @@ func Search(c *context.APIContext) {
 			ID:        users[i].ID,
 			UserName:  users[i].Name,
 			AvatarUrl: users[i].AvatarLink(),
-			FullName:  markup.Sanitize(users[i].FullName),
+			FullName:  users[i].FullName,
 		}
 		if c.IsLogged {
 			results[i].Email = users[i].Email

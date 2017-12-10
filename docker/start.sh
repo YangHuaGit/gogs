@@ -38,14 +38,6 @@ create_volume_subfolder() {
     done
 }
 
-setids() {
-    PUID=${PUID:-1000}
-    PGID=${PGID:-1000}
-    groupmod -o -g "$PGID" git
-    usermod -o -u "$PUID" git
-}
-
-setids
 cleanup
 create_volume_subfolder
 

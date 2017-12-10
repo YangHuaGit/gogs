@@ -4,7 +4,7 @@
 		<div class="ui grid">
 			<div class="ui five wide column">
 				<div class="ui card">
-					{{if eq .LoggedUserName .Owner.Name}}
+					<!-- {{if eq .LoggedUserName .Owner.Name}}
 						<a class="image poping up" href="{{AppSubURL}}/user/settings/avatar" id="profile-avatar" data-content="{{.i18n.Tr "user.change_avatar"}}" data-variation="inverted tiny" data-position="bottom center">
 							<img src="{{.Owner.RelAvatarLink}}?s=290" title="{{.Owner.Name}}"/>
 						</a>
@@ -12,7 +12,7 @@
 						<span class="image">
 							<img src="{{.Owner.RelAvatarLink}}?s=290" title="{{.Owner.Name}}"/>
 						</span>
-					{{end}}
+					{{end}} -->
 					<div class="content">
 						{{if .Owner.FullName}}<span class="header text center">{{.Owner.FullName}}</span>{{end}}
 						<span class="username text center">{{.Owner.Name}}</span>

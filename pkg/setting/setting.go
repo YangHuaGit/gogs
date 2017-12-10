@@ -58,6 +58,9 @@ var (
 	AppName        string
 	AppURL         string
 	AppSubURL      string
+	SysLinkURL     string
+	WorkBenchURL   string
+	ModelURL       string
 	AppSubURLDepth int // Number of slashes
 	AppPath        string
 	AppDataPath    string
@@ -440,6 +443,21 @@ func NewContext() {
 	if AppURL[len(AppURL)-1] != '/' {
 		AppURL += "/"
 	}
+	SysLinkURL= sec.Key("SYSLINK_URL").MustString("http://syslink.com/#/logout")
+    if SysLinkURL[len(SysLinkURL)-1] != '/' {
+		SysLinkURL += "/"
+	}
+	WorkBenchURL= sec.Key("WORKBENCH_URL").String()
+    if WorkBenchURL[len(WorkBenchURL)-1] != '/' {
+		WorkBenchURL += "/"
+	}
+	ModelURL= sec.Key("MODEL_URL").String()
+    if ModelURL[len(ModelURL)-1] != '/' {
+		ModelURL += "/"
+	}
+
+    
+
 
 	// Check if has app suburl.
 	url, err := url.Parse(AppURL)
