@@ -140,7 +140,7 @@ func newMacaron() *macaron.Macaron {
 // 	m.Use(session.Sessioner(session.Options{
 //     Provider:       "redis",
 //     // e.g.: network=tcp,addr=127.0.0.1:6379,password=macaron,db=0,pool_size=100,idle_timeout=180,prefix=session:
-//     ProviderConfig: "addr=127.0.0.1:6379,prefix=spring:session:sessions:aaa:,password=macaron",
+//     ProviderConfig: "addr=127.0.0.1:6379,prefix=spring:session:sessions:aaa:,password=",
 //     CookieName: "SESSION1",
 //     IDLength: 32,
 
@@ -258,8 +258,7 @@ func runWeb(c *cli.Context) error {
 		m.Post("/forget_password", user.ForgotPasswdPost)
 		m.Get("/logout", user.SignOut)
 		m.Get("/111", user.SignOut1)
-		m.Get("/toWorkbench",user.ToWorkbench)
-		m.Get("/toModel",user.ToModel)
+
 	})
 	// ***** END: User *****
 
@@ -414,6 +413,9 @@ func runWeb(c *cli.Context) error {
 	// ***** END: Organization *****
 
 	// ***** START: Repository *****
+
+
+
 	m.Group("/repo", func() {
 		m.Get("/create", adminReq,repo.Create)
 		m.Post("/create", bindIgnErr(form.CreateRepo{}), repo.CreatePost)
@@ -421,6 +423,81 @@ func runWeb(c *cli.Context) error {
 		m.Post("/migrate", bindIgnErr(form.MigrateRepo{}), repo.MigratePost)
 		m.Combo("/fork/:repoid").Get(repo.Fork).
 			Post(bindIgnErr(form.CreateRepo{}), repo.ForkPost)
+	},reqSignIn)
+
+
+	m.Group("/repo", func() {
+
+		m.Get("/:username/:reponame",context.RepoAssignment(),context.RepoRef() ,repo.C_Home)
+
+		m.Group("/:username/:reponame", func() {
+			m.Group("", func() {
+				m.Get("/src/*", repo.C_Home)
+				//m.Get("/raw/*", repo.SingleDownload)
+				//m.Get("/commits/*", repo.RefCommits)
+				//m.Get("/commit/:sha([a-f0-9]{7,40})$", repo.Diff)
+				//m.Get("/forks", repo.Forks)
+			}, repo.MustBeNotBare, context.RepoRef())
+		}, context.RepoAssignment())
+
+
+		m.Group("/:username/:reponame", func() {
+			m.Group("/settings", func() {
+				m.Combo("").Get(repo.Settings).
+					Post(bindIgnErr(form.RepoSetting{}), repo.SettingsPost)
+				m.Group("/collaboration", func() {
+					m.Combo("").Get(repo.C_SettingsCollaboration).Post(repo.C_SettingsCollaborationPost)
+					m.Post("/access_mode", repo.ChangeCollaborationAccessMode)
+					m.Post("/delete", repo.DeleteCollaboration)
+				})
+				//m.Group("/branches", func() {
+				//	m.Get("", repo.SettingsBranches)
+				//	m.Post("/default_branch", repo.UpdateDefaultBranch)
+				//	m.Combo("/*").Get(repo.SettingsProtectedBranch).
+				//		Post(bindIgnErr(form.ProtectBranch{}), repo.SettingsProtectedBranchPost)
+				//}, func(c *context.Context) {
+				//	if c.Repo.Repository.IsMirror {
+				//		c.NotFound()
+				//		return
+				//	}
+				//})
+				//
+				//m.Group("/hooks", func() {
+				//	m.Get("", repo.Webhooks)
+				//	m.Post("/delete", repo.DeleteWebhook)
+				//	m.Get("/:type/new", repo.WebhooksNew)
+				//	m.Post("/gogs/new", bindIgnErr(form.NewWebhook{}), repo.WebHooksNewPost)
+				//	m.Post("/slack/new", bindIgnErr(form.NewSlackHook{}), repo.SlackHooksNewPost)
+				//	m.Post("/discord/new", bindIgnErr(form.NewDiscordHook{}), repo.DiscordHooksNewPost)
+				//	m.Post("/gogs/:id", bindIgnErr(form.NewWebhook{}), repo.WebHooksEditPost)
+				//	m.Post("/slack/:id", bindIgnErr(form.NewSlackHook{}), repo.SlackHooksEditPost)
+				//	m.Post("/discord/:id", bindIgnErr(form.NewDiscordHook{}), repo.DiscordHooksEditPost)
+				//
+				//	m.Group("/:id", func() {
+				//		m.Get("", repo.WebHooksEdit)
+				//		m.Post("/test", repo.TestWebhook)
+				//		m.Post("/redelivery", repo.RedeliveryWebhook)
+				//	})
+				//
+				//	m.Group("/git", func() {
+				//		m.Get("", repo.SettingsGitHooks)
+				//		m.Combo("/:name").Get(repo.SettingsGitHooksEdit).
+				//			Post(repo.SettingsGitHooksEditPost)
+				//	}, context.GitHookService())
+				//})
+
+				m.Group("/keys", func() {
+					m.Combo("").Get(repo.SettingsDeployKeys).
+						Post(bindIgnErr(form.AddSSHKey{}), repo.SettingsDeployKeysPost)
+					m.Post("/delete", repo.DeleteDeployKey)
+				})
+
+			}, func(c *context.Context) {
+				c.Data["PageIsSettings"] = true
+			})
+		}, context.RepoAssignment(), reqRepoAdmin, context.RepoRef())
+
+
 	},reqSignIn)
 
 	m.Group("/:username/:reponame", func() {

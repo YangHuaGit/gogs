@@ -261,7 +261,7 @@ func SignOut(c *context.Context) {
 	// c.Redirect(setting.AppSubURL + "/")
 	// c.SetCookie("JSESSIONID", "", -1, "gogs.modelica-china.com")
 	// c.Redirect("http://gogs.modelica-china.com:8080/login.html#/logout")
-	c.Redirect("http://syslink.com/#/logout")
+	c.Redirect("http://"+setting.Domain+"/#/logout")
 }
 
 func SignOut1(c *context.Context) {
@@ -273,19 +273,7 @@ func SignOut1(c *context.Context) {
 	c.Redirect(setting.AppSubURL + "/")
 }
 
-func ToWorkbench(c *context.Context) {
-	//  c.Session.Delete("uid")
-	//  c.Session.Delete("uname")
-	// c.Redirect("http://gogs.modelica-china.com/#/Myspace")
-	fmt.Print(setting.AppURL)
-	c.Redirect(setting.WorkBenchURL)
-}
 
-func ToModel(c *context.Context) {
-	 c.Session.Delete("uid")
-	 c.Session.Delete("uname")
-	c.Redirect(setting.ModelURL)
-}
 
 
 func SignUp(c *context.Context) {

@@ -35,7 +35,8 @@
 		<meta property="og:site_name" content="Gogs">
 	{{end}}
 
-	<link rel="shortcut icon" href="{{AppSubURL}}/img/favicon.png" />
+	<!-- <link rel="shortcut icon" href="{{AppSubURL}}/img/favicon.png" /> -->
+	<link rel="shortcut icon" href="{{AppSubURL}}/img/syslogo.png" />
 
 	<script src="{{AppSubURL}}/js/jquery-1.11.3.min.js"></script>
 	<script src="{{AppSubURL}}/js/libs/jquery.are-you-sure.js"></script>
@@ -73,6 +74,18 @@
 	<meta name="theme-color" content="{{ThemeColorMetaTag}}">
 
 	{{template "inject/head" .}}
+
+
+	<style type="text/css">
+		
+	
+    .icon-focus:hover{
+      background-color: #e6e6e6;
+    }
+    .icon-focus:active{
+      background-color: #e6e6e6;
+    }
+	</style>
 </head>
 <body>
 	<div class="full height">
@@ -93,9 +106,12 @@
                      <div style="line-height: 50px;width: 150px;">
                       
                      </div>
-                    <div>
-                   <img src="{{AppURL}}img/syslogo.png"  style="height: 40px;margin-top: 5px;" />
-                   <img src="{{AppURL}}img/systitle.png"  style="height: 40px;margin-top: 5px;" />
+                    <div >
+                   <a href="http://{{AppDomain}}/#/brief">
+                   	  <img src="{{AppSubURL}}/img/syslogo.png"  style="height: 40px;margin-top: 5px;" />
+                   <img src="{{AppSubURL}}/img/systitle.png"  style="height: 40px;margin-top: 5px;" />
+                   </a>
+                 
                     </div>
  
                    </div>
@@ -106,23 +122,24 @@
                 	 <div class="ui secondary pointing menu" style="height: inherit;width: inherit;border-bottom: none;">
 
               	 <div style="width: 20px;"></div>
-             <a class="item " style="line-height: 21px;height: inherit;width: 100px;display: inline-block;text-align: center;font-size: 18px;padding-left: 16px;padding-right: 16px;padding-top: 12px;padding-bottom: 12px;" href="http://syslink.com/#/Myspace">工作台 </a>
+             <a class="item " style="line-height: 21px;height: inherit;width: 100px;display: inline-block;text-align: center;font-size: 18px;padding-left: 16px;padding-right: 16px;padding-top: 12px;padding-bottom: 12px;" href="http://{{AppDomain}}/#/brief">工作台 </a>
              <a class="item active" style="line-height: 21px;height: inherit;width: 100px;display: inline-block;text-align: center;font-size: 18px;padding-left: 16px;padding-right: 16px;padding-top: 12px;padding-bottom: 12px;"    href="{{AppSubURL}}/"> 协同</a>
              <a class="item" style="line-height: 21px;height: inherit;width: 100px;
-             display: inline-block;text-align: center;font-size: 18px;padding-left: 16px;padding-right: 16px;padding-top: 12px;padding-bottom: 12px;"  href="http://syslink.com/#/model/index">模型 </a>
+             display: inline-block;text-align: center;font-size: 18px;padding-left: 16px;padding-right: 16px;padding-top: 12px;padding-bottom: 12px;"  href="http://{{AppDomain}}/#/model/index">模型 </a>
             <!--  <a class="item" style="line-height: 21px;height: inherit;width: 100px;
              display: inline-block;text-align: center;font-size: 18px;padding-left: 16px;padding-right: 16px;padding-top: 12px;padding-bottom: 12px;"  href="http://syslink.com/#/Myspace" >仿真 </a> -->
           
                       </div>
                       {{end}}
                 </div>
-
-
-                <div style="min-width: 50px;">
+                <span style="line-height: 50px;font-family: Microsoft Yahei;margin-right: 10px;display: inline-block;min-width: 90px;text-align: right;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" title="{{.LoggedUser.Name}}"> {{.LoggedUser.Name}}</span>
+               
+                <div style="min-width: 50px;" >
                 	<!-- 
                 		<i class="iconfont icon-gerenxinxi" style="font-size: 32px;line-height: 50px;"></i> -->
                 
                 {{if .IsLogged}}
+                                
 									<div class="right menu">
 										<!-- <div id="syslink-dropdown" class="ui dropdown head link jump item poping up" data-content="{{.i18n.Tr "create_new"}}" data-variation="tiny inverted">
 											<span class="text">
@@ -145,16 +162,22 @@
 									<!-- 	</div>     -->   <!-- end dropdown menu create new -->
 
 										<div id="syslink-dropdown" class="ui dropdown head link jump item poping up" tabindex="-1"  data-variation="tiny inverted">
-											
+
+											<div style="display: flex;"  class="icon-focus">
+
 											<i class="iconfont icon-gerenxinxi" style="font-size: 32px;line-height: 50px;color: black;"></i>
+											  <i class="iconfont icon-xiala" style="font-size: 16px;line-height: 50px;color: black;"></i>	
+											</div>
+											
+											
 											<div class="menu" tabindex="-1" style="left: auto;right: 0;">
-												<div class="ui header">
-													<!-- {{.i18n.Tr "signed_in_as"}} --> 当前用户<strong>{{.LoggedUser.Name}}</strong>
-												</div>
+												<!-- <div class="ui header">
+													{{.i18n.Tr "signed_in_as"}} 当前用户<strong>{{.LoggedUser.Name}}</strong>
+												</div> -->
 
 												<div class="divider"></div>
 												<!-- <a class="item" href="{{AppSubURL}}/{{.LoggedUser.Name}}"> -->
-												<a class="item" href="http:///syslink.com/#/personalInfo">
+												<a class="item" href="http://{{AppDomain}}/#/personalInfo">
 													<i class="iconfont icon-yonghuziliao-xianxing" style="font-size: 20px;"></i> 
 													{{.i18n.Tr "your_profile"}}     <!-- Your profile -->
 												</a>
@@ -162,7 +185,7 @@
 												
 												
 												<div class="divider"></div>
-												<a class="item" href="http://syslink.com/#/logout">
+												<a class="item" href="{{AppSubURL}}/user/logout">
 													<i class="iconfont icon-dengluzhuangtaituichu" style="font-size: 20px;"></i>
 													{{.i18n.Tr "sign_out"}}   <!-- Sign Out -->
 												</a>

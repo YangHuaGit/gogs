@@ -22,6 +22,8 @@ const (
 )
 
 func Home(c *context.Context) {
+
+
 	if c.IsLogged {
 		if !c.User.IsActive && setting.Service.RegisterEmailConfirm {
 			c.Data["Title"] = c.Tr("auth.active_your_account")
@@ -31,7 +33,7 @@ func Home(c *context.Context) {
 		}
 		return
 	}
-    
+
  //    c.Session.Set("uid", 1)
 	// c.Session.Set("uname", "yh")
 	// Check auto-login.
@@ -41,7 +43,7 @@ func Home(c *context.Context) {
 		c.Redirect(setting.AppSubURL + "/user/login")
 		return
 	}
-
+	c.Redirect(setting.AppSubURL + "/user/logout" )
 	c.Data["PageIsHome"] = true
 	c.Success(HOME)
 }
