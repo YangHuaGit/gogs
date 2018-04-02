@@ -2,7 +2,7 @@ package repo
 
 import (
 	//"bytes"
-	"fmt"
+	//"fmt"
 	//gotemplate "html/template"
 	//"io/ioutil"
 	//"path"
@@ -26,6 +26,9 @@ import (
 	"github.com/gogits/gogs/models"
 	"github.com/gogits/gogs/models/errors"
 
+
+	//"fmt"
+	"fmt"
 )
 
 
@@ -156,7 +159,7 @@ func C_Home(c *context.Context) {
 	ll.Committer = lCommit.Committer
 	ll.Author = lCommit.Author
 	ll.ID = lCommit.ID.String()
-	fmt.Println(lCommit)
+	//fmt.Println(lCommit)
 
     res["LatestCommit"] = ll
 	res["LatestCommitUser"] = c.Data["LatestCommitUser"]
@@ -170,6 +173,9 @@ func C_Home(c *context.Context) {
 	res["Tags"] = c.Data["Tags"]
 
 
+	fmt.Println(12312312312,c.Link)
+
+
 
 
 
@@ -181,7 +187,7 @@ func C_Home(c *context.Context) {
 
 
 func C_SettingsCollaboration(c *context.Context) {
-	fmt.Println(111,c.Req.Header)
+	//fmt.Println(111,c.Req.Header)
 	c.Data["Title"] = c.Tr("repo.settings")
 	c.Data["PageIsSettingsCollaboration"] = true
 
@@ -239,3 +245,31 @@ func C_SettingsCollaborationPost(c *context.Context) {
 	c.Redirect(setting.AppSubURL + c.Req.URL.Path)
 }
 
+
+
+//
+//func Token(c *context.Context) {
+//
+//
+//	if c.IsLogged {
+//		if !c.User.IsActive && setting.Service.RegisterEmailConfirm {
+//			c.Data["Title"] = c.Tr("auth.active_your_account")
+//			c.Success(user.ACTIVATE)
+//		} else {
+//			user.Dashboard(c)
+//		}
+//		return
+//	}
+//
+//
+//	// Check auto-login.
+//	uname := c.GetCookie(setting.CookieUserName)
+//	if len(uname) != 0 {
+//		fmt.Print("555555"+setting.CookieUserName+"55555")
+//		c.Redirect(setting.AppSubURL + "/user/login")
+//		return
+//	}
+//	c.Redirect(setting.AppSubURL + "/user/logout" )
+//	c.Data["PageIsHome"] = true
+//	c.JSON(200,c.GetCookie(setting.CSRFCookieName))
+//}

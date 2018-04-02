@@ -31,19 +31,20 @@ func Home(c *context.Context) {
 		} else {
 			user.Dashboard(c)
 		}
+
 		return
 	}
 
- //    c.Session.Set("uid", 1)
-	// c.Session.Set("uname", "yh")
+
 	// Check auto-login.
 	uname := c.GetCookie(setting.CookieUserName)
+	fmt.Println(123123,uname)
 	if len(uname) != 0 {
 		fmt.Print("555555"+setting.CookieUserName+"55555")
 		c.Redirect(setting.AppSubURL + "/user/login")
 		return
 	}
-	c.Redirect(setting.AppSubURL + "/user/logout" )
+	//c.Redirect(setting.AppSubURL + "/user/logout" )
 	c.Data["PageIsHome"] = true
 	c.Success(HOME)
 }
