@@ -593,10 +593,10 @@ func isRepositoryExist(e Engine, u *User, repoName string) (bool, error) {
 	return has && com.IsDir(RepoPath(u.Name, repoName)), err
 }
 func isRepositoryExist1(e Engine,repoName string)(bool,error){
-    
+
     repo := new(Repository)
     has, err := e.Where("name=?",repoName).Get(repo)
-	return has, err 
+	return has, err
 
 }
 

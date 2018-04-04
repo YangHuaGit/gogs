@@ -171,6 +171,7 @@ func C_Home(c *context.Context) {
 	res["Branches"] = c.Data["Branches"]
 	res["Releases"] = c.Repo.Repository.NumTags
 	res["Tags"] = c.Data["Tags"]
+	res["Repository"] = c.Repo
 
 
 	fmt.Println(12312312312,c.Link)

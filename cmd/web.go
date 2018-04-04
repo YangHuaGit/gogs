@@ -184,7 +184,32 @@ func runWeb(c *cli.Context) error {
 	// FIXME: not all routes need go through same middlewares.
 	// Especially some AJAX requests, we can reduce middleware number to improve performance.
 	// Routers.
+	m.Get("/token",ignSignIn,routes.Token)
+	m.Get("/sso",ignSignIn,user.SSO)
 	m.Get("/", ignSignIn, routes.Home)
+	m.Get("/")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	m.Group("/explore", func() {
 		m.Get("", func(c *context.Context) {
 			c.Redirect(setting.AppSubURL + "/explore/repos")
@@ -438,7 +463,24 @@ func runWeb(c *cli.Context) error {
 				//m.Get("/commit/:sha([a-f0-9]{7,40})$", repo.Diff)
 				//m.Get("/forks", repo.Forks)
 			}, repo.MustBeNotBare, context.RepoRef())
+
+
+		m.Get("/archive/*", repo.MustBeNotBare, repo.Download)
+
+
+			m.Group("/releases", func() {
+				m.Get("/new", repo.NewRelease)
+				m.Post("/new", bindIgnErr(form.NewRelease{}), repo.C_NewReleasePost)
+				m.Post("/delete", repo.C_DeleteRelease)
+				m.Get("/edit/*", repo.EditRelease)
+				m.Post("/edit/*", bindIgnErr(form.EditRelease{}), repo.C_EditReleasePost)
+			}, repo.MustBeNotBare, reqRepoWriter, func(c *context.Context) {
+				c.Data["PageIsViewFiles"] = true
+			})
+
 		}, context.RepoAssignment())
+
+
 
 
 		m.Group("/:username/:reponame", func() {
@@ -450,6 +492,7 @@ func runWeb(c *cli.Context) error {
 					m.Post("/access_mode", repo.ChangeCollaborationAccessMode)
 					m.Post("/delete", repo.DeleteCollaboration)
 				})
+
 				//m.Group("/branches", func() {
 				//	m.Get("", repo.SettingsBranches)
 				//	m.Post("/default_branch", repo.UpdateDefaultBranch)
@@ -499,6 +542,22 @@ func runWeb(c *cli.Context) error {
 
 
 	},reqSignIn)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	m.Group("/:username/:reponame", func() {
 		m.Group("/settings", func() {
