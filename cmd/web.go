@@ -287,7 +287,7 @@ func runWeb(c *cli.Context) error {
 	})
 	// ***** END: User *****
 
-	adminReq := context.Toggle(&context.ToggleOptions{SignInRequired: true, AdminRequired: true})
+	//adminReq := context.Toggle(&context.ToggleOptions{SignInRequired: true, AdminRequired: true})
 
 	// ***** START: Admin *****
 // m.Group("/admin", func() {
@@ -439,11 +439,11 @@ func runWeb(c *cli.Context) error {
 
 	// ***** START: Repository *****
 
-
+	reqRepoCreate := context.RequireRepoCreate()
 
 	m.Group("/repo", func() {
-		m.Get("/create", adminReq,repo.Create)
-		m.Post("/create", bindIgnErr(form.CreateRepo{}), repo.CreatePost)
+		m.Get("/create", reqRepoCreate,repo.Create)
+		m.Post("/create",reqRepoCreate, bindIgnErr(form.CreateRepo{}), repo.CreatePost)
 		m.Get("/migrate", repo.Migrate)
 		m.Post("/migrate", bindIgnErr(form.MigrateRepo{}), repo.MigratePost)
 		m.Combo("/fork/:repoid").Get(repo.Fork).

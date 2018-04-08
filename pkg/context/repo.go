@@ -426,6 +426,16 @@ func RequireRepoWriter() macaron.Handler {
 	}
 }
 
+
+func RequireRepoCreate() macaron.Handler {
+	return func(c *Context) {
+		if !c.IsLogged || !c.User.CreateRepo {
+			c.NotFound()
+			return
+		}
+	}
+}
+
 // GitHookService checks if repository Git hooks service has been enabled.
 func GitHookService() macaron.Handler {
 	return func(c *Context) {
