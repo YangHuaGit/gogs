@@ -451,7 +451,7 @@ func runWeb(c *cli.Context) error {
 	},reqSignIn)
 
 
-	m.Group("/repo", func() {
+	m.Group("/syslink", func() {
 
 		m.Get("/:username/:reponame",context.RepoAssignment(),context.RepoRef() ,repo.C_Home)
 
