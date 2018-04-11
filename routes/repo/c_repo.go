@@ -28,7 +28,7 @@ import (
 
 
 	//"fmt"
-	"fmt"
+	"github.com/gogits/gogs/pkg/tool"
 )
 
 
@@ -39,6 +39,8 @@ type fileInfo struct {
 	Message string
 	CommitID   string
 	CommitDate string
+	Size string
+	IsDir bool
 
 }
 
@@ -146,12 +148,14 @@ func C_Home(c *context.Context) {
 		file.Message = commit.CommitMessage
 		file.CommitID = commit.ID.String()
 		file.CommitDate = commit.Committer.When.String()
+		file.Size = tool.FileSize(entry.Blob().Size())
+		file.IsDir = entry.IsDir()
 		files = append(files, file)
 	}
 
 	res := make(map[string]interface{})
 
-	res["files"] = files
+	res["Files"] = files
 
 
 	lCommit := c.Data["LatestCommit"].(*git.Commit)
@@ -174,15 +178,68 @@ func C_Home(c *context.Context) {
 	res["Repository"] = c.Repo
 
 
-	fmt.Println(12312312312,c.Link)
 
+
+	c.JSON(200,res)
+
+	//c.HTML(200, HOME)
+
+}
+
+
+
+func C_GetFiles(c *context.Context) {
+
+
+	res := make(map[string]interface{})
+
+
+	// Get current entry user currently looking at.
+	entry, err := c.Repo.Commit.GetTreeEntryByPath(c.Repo.TreePath)
+
+
+
+	if err != nil {
+		c.NotFoundOrServerError("Repo.Commit.GetTreeEntryByPath", git.IsErrNotExist, err)
+		return
+	}
+
+	branchLink := c.Repo.RepoLink + "/src/" + c.Repo.BranchName
+	treeLink := branchLink
+	rawLink := c.Repo.RepoLink + "/raw/" + c.Repo.BranchName
+
+	if entry.IsDir() {
+
+		renderDirectory(c, treeLink)
+
+		var files []fileInfo
+		commitsInfo := c.Data["Files"].([][]interface{})
+		for _, info := range commitsInfo {
+			entry:= info[0].(*git.TreeEntry)
+			commit:= info[1].(*git.Commit)
+			var file fileInfo
+			file.FileName = entry.Name()
+			file.Message = commit.CommitMessage
+			file.CommitID = commit.ID.String()
+			file.CommitDate = commit.Committer.When.String()
+			file.Size = tool.FileSize(entry.Blob().Size())
+			file.IsDir = entry.IsDir()
+			files = append(files, file)
+		}
+
+		res["Files"] = files
+
+	} else {
+
+		renderFile(c, entry, treeLink, rawLink)
+	}
 
 
 
 
 	c.JSON(200,res)
 
-	//c.HTML(200, HOME)
+
 
 }
 

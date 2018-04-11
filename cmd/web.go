@@ -457,7 +457,8 @@ func runWeb(c *cli.Context) error {
 
 		m.Group("/:username/:reponame", func() {
 			m.Group("", func() {
-				m.Get("/src/*", repo.C_Home)
+				//m.Get("/src/*", repo.C_Home)
+				m.Get("/src/*", repo.C_GetFiles)
 				//m.Get("/raw/*", repo.SingleDownload)
 				//m.Get("/commits/*", repo.RefCommits)
 				//m.Get("/commit/:sha([a-f0-9]{7,40})$", repo.Diff)
