@@ -20,7 +20,7 @@ func Token(c *context.Context) {
 			user.C_Dashboard(c)
 			csrf := make(map[string]interface{})
 			csrf["csrf"] = c.GetCookie(setting.CSRFCookieName)
-			csrf["Feeds"] = c.Data["Feeds"]
+			//csrf["Feeds"] = c.Data["Feeds"]
 			c.JSON(200,csrf)
 
 		}

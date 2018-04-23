@@ -428,8 +428,22 @@ func RequireRepoWriter() macaron.Handler {
 
 
 func RequireRepoCreate() macaron.Handler {
+
+
+
 	return func(c *Context) {
-		if !c.IsLogged || !c.User.CreateRepo {
+		var createRepo bool = false
+		auths :=models.GetUserAuth(c.User.ID)
+		for _,v  :=range auths{
+			if v["auth_code"] == "management_repo_add"{
+				createRepo = true
+				break
+			}
+		}
+		fmt.Print(createRepo)
+
+
+		if !c.IsLogged || !createRepo {
 			c.NotFound()
 			return
 		}
