@@ -34,6 +34,7 @@ func GetUserAuth (uid int64)[]map[string]string{
 		"ON c.auth_id = r.auth_id " +
 		"WHERE r.role_id in (SELECT ur.role_id FROM user_role as ur WHERE ur.uid  = ?)",uid,uid)
 	fmt.Print(err)
+	engine.Close()
 	//jjj := new(Auth)
 	//has, err := engine.Where("auth_id=?", "1").Get(jjj)
 	//fmt.Print(has,err)
