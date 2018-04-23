@@ -4,6 +4,7 @@ import (
 	"github.com/go-xorm/xorm"
 	"fmt"
 	"time"
+	"github.com/gogits/gogs/pkg/setting"
 )
 
 type Auth struct {
@@ -20,9 +21,10 @@ type Auth struct {
 func GetUserAuth (uid int64)[]map[string]string{
 
 
+	sec := setting.Cfg.Section("database")
 
-
-	engine, _ := xorm.NewEngine("mysql", "root:root@tcp/syslink?charset=utf8")
+	
+	engine, _ := xorm.NewEngine("mysql", "root:"+sec.Key("PASSWD").String()+"@tcp/syslink?charset=utf8")
 	//engine.Sync2(new(Auth))
 
 	results, err := engine.QueryString ("select d.* from auth as d INNER JOIN user_auth as l " +
