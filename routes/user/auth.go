@@ -93,13 +93,14 @@ func isValidRedirect(url string) bool {
 
 func Login(c *context.Context) {
 	c.Data["Title"] = c.Tr("sign_in")
-
-	// Check auto-login.
+  	// Check auto-login.
 	isSucceed, err := AutoLogin(c)
+
 	if err != nil {
 		c.Handle(500, "AutoLogin", err)
 		return
 	}
+
 
 	redirectTo := c.Query("redirect_to")
 	if len(redirectTo) > 0 {

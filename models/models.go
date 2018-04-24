@@ -45,6 +45,7 @@ type Engine interface {
 
 var (
 	x         *xorm.Engine
+	sx        *xorm.Engine
 	tables    []interface{}
 	HasEngine bool
 
@@ -163,6 +164,7 @@ func getEngine() (*xorm.Engine, error) {
 	default:
 		return nil, fmt.Errorf("Unknown database type: %s", DbCfg.Type)
 	}
+	//xorm.NewEngine("mysql", "root:root@tcp/syslink?charset=utf8")
 	return xorm.NewEngine(DbCfg.Type, connStr)
 }
 

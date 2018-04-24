@@ -143,6 +143,9 @@ func NewRepoContext() {
 type Repository struct {
 	ID            int64
 	OwnerID       int64  `xorm:"UNIQUE(s)"`
+
+	DirectoryId   int64
+
 	Owner         *User  `xorm:"-"`
 	LowerName     string `xorm:"UNIQUE(s) INDEX NOT NULL"`
 	Name          string `xorm:"INDEX NOT NULL"`
@@ -897,6 +900,18 @@ func prepareRepoCommit(repo *Repository, tmpDir, repoPath string, opts CreateRep
 		[]byte(newpkgContent), 0644); err != nil {
 		return fmt.Errorf("write package.mo: %v", err)
 	}
+
+	//cloneLink := repo.CloneLink()
+	//match := map[string]string{
+	//	"Name":           repo.Name,
+	//	"Description":    repo.Description,
+	//	"CloneURL.SSH":   cloneLink.SSH,
+	//	"CloneURL.HTTPS": cloneLink.HTTPS,
+	//}
+	//if err = ioutil.WriteFile(filepath.Join(tmpDir, "README.md"),
+	//	[]byte(com.Expand(string(data), match)), 0644); err != nil {
+	//	return fmt.Errorf("write README.md: %v", err)
+	//}
 
 	// .gitignore
 	if len(opts.Gitignores) > 0 {

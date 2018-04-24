@@ -58,12 +58,13 @@ var (
 	AppName        string
 	AppURL         string
 	AppSubURL      string
-	
+
 	AppSubURLDepth int // Number of slashes
 	AppPath        string
 	AppDataPath    string
 
 	// Server settings
+	CustomURL            string
 	Protocol             Scheme
 	Domain               string
 	HTTPAddr             string
@@ -443,7 +444,7 @@ func NewContext() {
 	}
 
 
-    
+
 
 
 	// Check if has app suburl.
@@ -473,6 +474,7 @@ func NewContext() {
 		}
 		UnixSocketPermission = uint32(UnixSocketPermissionParsed)
 	}
+	CustomURL = sec.Key("CUSTOMRUL").MustString("syslink/private")
 	Domain = sec.Key("DOMAIN").MustString("localhost")
 	HTTPAddr = sec.Key("HTTP_ADDR").MustString("0.0.0.0")
 	HTTPPort = sec.Key("HTTP_PORT").MustString("3000")

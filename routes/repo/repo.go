@@ -151,8 +151,8 @@ func CreatePost(c *context.Context, f form.CreateRepo) {
 }
 
 func Migrate(c *context.Context) {
-    
-    
+
+
 	c.Data["Title"] = c.Tr("new_migrate")
 	c.Data["private"] = c.User.LastRepoVisibility
 	c.Data["IsForcedPrivate"] = setting.Repository.ForcePrivate

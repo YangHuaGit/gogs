@@ -44,4 +44,36 @@ func Token(c *context.Context) {
 
 }
 
+func BBB(c *context.Context){
+
+
+
+
+
+
+
+	//c.Params(":path")
+	//fmt.Print(c.Params(":path"))
+	//b, err := redis.Dial("tcp", "127.0.0.1:6379")
+	//if err != nil {
+		//fmt.Println("Connect to redis error", err)
+		//return
+	//}
+	//
+	//defer b.Close()
+	//c.Session.Set("asdas","dsadsa")
+    //fmt.Sprint(c.Session)
+    //c.JSON(200,c.Session)
+
+
+
+
+
+
+
+
+
+
+}
+
 

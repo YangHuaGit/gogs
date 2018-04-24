@@ -23,7 +23,7 @@ func GetUserAuth (uid int64)[]map[string]string{
 
 	sec := setting.Cfg.Section("database")
 
-	
+
 	engine, _ := xorm.NewEngine("mysql", "root:"+sec.Key("PASSWD").String()+"@tcp/syslink?charset=utf8")
 	//engine.Sync2(new(Auth))
 

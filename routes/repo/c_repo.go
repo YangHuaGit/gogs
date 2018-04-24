@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	//"github.com/Unknwon/paginater"
-	//log "gopkg.in/clog.v1"
+	log "gopkg.in/clog.v1"
 
 	"github.com/gogits/git-module"
 
@@ -29,6 +29,8 @@ import (
 
 	//"fmt"
 	"github.com/gogits/gogs/pkg/tool"
+	"github.com/gogits/gogs/pkg/form"
+	"strconv"
 )
 
 
@@ -232,6 +234,7 @@ func C_GetFiles(c *context.Context) {
 	} else {
 
 		renderFile(c, entry, treeLink, rawLink)
+		res["File"] = c.Data["FileText"]
 	}
 
 
@@ -331,3 +334,48 @@ func C_SettingsCollaborationPost(c *context.Context) {
 //	c.Data["PageIsHome"] = true
 //	c.JSON(200,c.GetCookie(setting.CSRFCookieName))
 //}
+
+
+
+func C_CreatePost(c *context.Context, f form.C_CreateRepo) {
+	c.Data["Title"] = c.Tr("new_repo")
+
+	c.Data["Gitignores"] = models.Gitignores
+	c.Data["Licenses"] = models.Licenses
+	c.Data["Readmes"] = models.Readmes
+
+	ctxUser := checkContextUser(c, f.UserID)
+	if c.Written() {
+		return
+	}
+	c.Data["ContextUser"] = ctxUser
+
+	if c.HasError() {
+		c.HTML(200, CREATE)
+		return
+	}
+
+	repo, err := models.C_CreateRepository(c.User, ctxUser, models.C_CreateRepoOptions{
+		Name:        f.RepoName,
+		DirectoryId:  f.DirectoryId,
+		Description: f.Description,
+		Gitignores:  f.Gitignores,
+		License:     f.License,
+		Readme:      f.Readme,
+		IsPrivate:   f.Private || setting.Repository.ForcePrivate,
+		AutoInit:    f.AutoInit,
+	})
+	if err == nil {
+		log.Trace("Repository created [%d]: %s/%s", repo.ID, ctxUser.Name, repo.Name)
+		c.Redirect(setting.AppSubURL + "/" +setting.CustomURL+ "/"+ctxUser.Name + "/" +strconv.FormatInt(f.DirectoryId,10)+"/"+ repo.Name)
+		return
+	}
+
+	if repo != nil {
+		if errDelete := models.DeleteRepository(ctxUser.ID, repo.ID); errDelete != nil {
+			log.Error(4, "DeleteRepository: %v", errDelete)
+		}
+	}
+
+	handleCreateError(c, ctxUser, err, "CreatePost", CREATE, &f)
+}

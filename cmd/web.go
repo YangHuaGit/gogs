@@ -22,7 +22,6 @@ import (
 	"github.com/go-macaron/csrf"
 	"github.com/go-macaron/gzip"
 	"github.com/go-macaron/i18n"
-	"github.com/go-macaron/session"
 	"github.com/go-macaron/toolbox"
 	"github.com/mcuadros/go-version"
 	"github.com/urfave/cli"
@@ -43,6 +42,7 @@ import (
 	"github.com/gogits/gogs/routes/org"
 	"github.com/gogits/gogs/routes/repo"
 	"github.com/gogits/gogs/routes/user"
+	"github.com/go-macaron/session"
 )
 
 var Web = cli.Command{
@@ -137,14 +137,14 @@ func newMacaron() *macaron.Macaron {
 		SubURL: setting.AppSubURL,
 	}))
 	m.Use(session.Sessioner(setting.SessionConfig))
-// 	m.Use(session.Sessioner(session.Options{
-//     Provider:       "redis",
-//     // e.g.: network=tcp,addr=127.0.0.1:6379,password=macaron,db=0,pool_size=100,idle_timeout=180,prefix=session:
-//     ProviderConfig: "addr=127.0.0.1:6379,prefix=spring:session:sessions:aaa:,password=",
-//     CookieName: "SESSION1",
-//     IDLength: 32,
-
-// }))
+//	m.Use(session.Sessioner(session.Options{
+//   Provider:       "redis",
+//   // e.g.: network=tcp,addr=127.0.0.1:6379,password=macaron,db=0,pool_size=100,idle_timeout=180,prefix=session:
+//   ProviderConfig: "addr=127.0.0.1:6379,prefix=spring:session:sessions:aaa:,password=",
+//   CookieName: "SESSION1",
+//   IDLength: 32,
+//
+//}))
 
 	m.Use(csrf.Csrfer(csrf.Options{
 		Secret:     setting.SecretKey,
@@ -188,6 +188,7 @@ func runWeb(c *cli.Context) error {
 	m.Get("/sso",ignSignIn,user.SSO)
 	m.Get("/", ignSignIn, routes.Home)
 	m.Get("/")
+	m.Get("/bbb/:path",routes.BBB)
 
 
 
@@ -453,7 +454,21 @@ func runWeb(c *cli.Context) error {
 
 	m.Group("/syslink", func() {
 
+
+
+		m.Group("/repo", func() {
+			m.Get("/create", reqRepoCreate,repo.Create)
+			m.Post("/create",reqRepoCreate, bindIgnErr(form.C_CreateRepo{}), repo.C_CreatePost)
+			m.Get("/migrate", repo.Migrate)
+			m.Post("/migrate", bindIgnErr(form.MigrateRepo{}), repo.MigratePost)
+			m.Combo("/fork/:repoid").Get(repo.Fork).
+				Post(bindIgnErr(form.CreateRepo{}), repo.ForkPost)
+		})
+
 		m.Get("/:username/:reponame",context.RepoAssignment(),context.RepoRef() ,repo.C_Home)
+
+		m.Get("/private/:username/:directoryId/:reponame",context.C_RepoAssignment(),context.C_RepoRef() ,repo.C_Home)
+
 
 		m.Group("/:username/:reponame", func() {
 			m.Group("", func() {
@@ -543,6 +558,25 @@ func runWeb(c *cli.Context) error {
 
 
 	},reqSignIn)
+
+
+
+
+	m.Group("/syslink", func() {
+
+		// Use the regexp to match the repository name
+		// Duplicated routes to enable different ways of accessing same set of URLs,
+		// e.g. with or without ".git" suffix.
+		m.Group("/private/:username/:dirctoryId/:reponame([\\d\\w-_\\.]+\\.git$)", func() {
+			m.Get("", ignSignIn, context.C_RepoAssignment(), context.RepoRef(), repo.Home)
+			m.Route("/*", "GET,POST", ignSignInAndCsrf, repo.C_HTTPContexter(), repo.C_HTTP)
+		})
+		m.Route("/private/:username/:dirctoryId/:reponame/*", "GET,POST", ignSignInAndCsrf, repo.C_HTTPContexter(), repo.C_HTTP)
+	})
+
+
+
+
 
 
 
