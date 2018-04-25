@@ -127,8 +127,8 @@ func c_createRepository(e *xorm.Session, doer, owner *User, repo *Repository) (e
 		return err
 	}
 
-	// has, err := isRepositoryExist(e, owner, repo.Name)
-	has, err := isRepositoryExist1(e, repo.Name)
+	has, err := isRepositoryExist(e, owner, repo.Name)
+	//has, err := isRepositoryExist1(e, repo.Name)
 	if err != nil {
 		return fmt.Errorf("IsRepositoryExist: %v", err)
 	} else if has {

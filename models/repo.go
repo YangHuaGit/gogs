@@ -1013,8 +1013,8 @@ func createRepository(e *xorm.Session, doer, owner *User, repo *Repository) (err
 		return err
 	}
 
-	// has, err := isRepositoryExist(e, owner, repo.Name)
-	has, err := isRepositoryExist1(e, repo.Name)
+	has, err := isRepositoryExist(e, owner, repo.Name)
+	//has, err := isRepositoryExist1(e, repo.Name)
 	if err != nil {
 		return fmt.Errorf("IsRepositoryExist: %v", err)
 	} else if has {
@@ -1197,8 +1197,8 @@ func TransferOwnership(doer *User, newOwnerName string, repo *Repository) error 
 
 	// Check if new owner has repository with same name.
 
-	// has, err := IsRepositoryExist(newOwner, repo.Name)
-	has, err := IsRepositoryExist1( repo.Name)
+	has, err := IsRepositoryExist(newOwner, repo.Name)
+	//has, err := IsRepositoryExist1( repo.Name)
 	if err != nil {
 		return fmt.Errorf("IsRepositoryExist: %v", err)
 	} else if has {
@@ -1315,8 +1315,8 @@ func ChangeRepositoryName(u *User, oldRepoName, newRepoName string) (err error) 
 		return err
 	}
 
-	// has, err := IsRepositoryExist(u, newRepoName)
-	has, err := IsRepositoryExist1( newRepoName)
+	has, err := IsRepositoryExist(u, newRepoName)
+	//has, err := IsRepositoryExist1( newRepoName)
 	if err != nil {
 		return fmt.Errorf("IsRepositoryExist: %v", err)
 	} else if has {
